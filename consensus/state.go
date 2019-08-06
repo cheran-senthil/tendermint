@@ -484,18 +484,9 @@ func (cs *ConsensusState) reconstructLastCommit(state sm.State) {
 		return
 	}
 	seenCommit := cs.blockStore.LoadSeenCommit(state.LastBlockHeight)
-	lastPrecommits := types.NewVoteSet(state.ChainID, state.LastBlockHeight, seenCommit.Round(), types.PrecommitType, state.LastValidators)
-	for _, precommit := range seenCommit.Precommits {
-		if precommit == nil {
-			continue
-		}
-		added, err := lastPrecommits.AddVote(seenCommit.ToVote(precommit))
-		if !added || err != nil {
-			cmn.PanicCrisis(fmt.Sprintf("Failed to reconstruct LastCommit: %v", err))
-		}
-	}
+	lastPrecommits := types.CommitToVoteSet(state.ChainID, seenCommit, state.LastValidators)
 	if !lastPrecommits.HasTwoThirdsMajority() {
-		cmn.PanicSanity("Failed to reconstruct LastCommit: Does not have +2/3 maj")
+		panic("Failed to reconstruct LastCommit: Does not have +2/3 maj")
 	}
 	cs.LastCommit = lastPrecommits
 }
@@ -504,13 +495,13 @@ func (cs *ConsensusState) reconstructLastCommit(state sm.State) {
 // The round becomes 0 and cs.Step becomes cstypes.RoundStepNewHeight.
 func (cs *ConsensusState) updateToState(state sm.State) {
 	if cs.CommitRound > -1 && 0 < cs.Height && cs.Height != state.LastBlockHeight {
-		cmn.PanicSanity(fmt.Sprintf("updateToState() expected state height of %v but found %v",
+		panic(fmt.Sprintf("updateToState() expected state height of %v but found %v",
 			cs.Height, state.LastBlockHeight))
 	}
 	if !cs.state.IsEmpty() && cs.state.LastBlockHeight+1 != cs.Height {
 		// This might happen when someone else is mutating cs.state.
 		// Someone forgot to pass in state.Copy() somewhere?!
-		cmn.PanicSanity(fmt.Sprintf("Inconsistent cs.state.LastBlockHeight+1 %v vs cs.Height %v",
+		panic(fmt.Sprintf("Inconsistent cs.state.LastBlockHeight+1 %v vs cs.Height %v",
 			cs.state.LastBlockHeight+1, cs.Height))
 	}
 
@@ -530,7 +521,7 @@ func (cs *ConsensusState) updateToState(state sm.State) {
 	lastPrecommits := (*types.VoteSet)(nil)
 	if cs.CommitRound > -1 && cs.Votes != nil {
 		if !cs.Votes.Precommits(cs.CommitRound).HasTwoThirdsMajority() {
-			cmn.PanicSanity("updateToState(state) called but last Precommit round didn't have +2/3")
+			panic("updateToState(state) called but last Precommit round didn't have +2/3")
 		}
 		lastPrecommits = cs.Votes.Precommits(cs.CommitRound)
 	}
@@ -699,13 +690,13 @@ func (cs *ConsensusState) handleMsg(mi msgInfo) {
 			cs.statsMsgQueue <- mi
 		}
 
-		if err == ErrAddingVote {
-			// TODO: punish peer
-			// We probably don't want to stop the peer here. The vote does not
-			// necessarily comes from a malicious peer but can be just broadcasted by
-			// a typical peer.
-			// https://github.com/tendermint/tendermint/issues/1281
-		}
+		// if err == ErrAddingVote {
+		// TODO: punish peer
+		// We probably don't want to stop the peer here. The vote does not
+		// necessarily comes from a malicious peer but can be just broadcasted by
+		// a typical peer.
+		// https://github.com/tendermint/tendermint/issues/1281
+		// }
 
 		// NOTE: the vote is broadcast to peers by the reactor listening
 		// for vote events
@@ -718,7 +709,7 @@ func (cs *ConsensusState) handleMsg(mi msgInfo) {
 		return
 	}
 
-	if err != nil {
+	if err != nil { // nolint:staticcheck
 		// Causes TestReactorValidatorSetChanges to timeout
 		// https://github.com/tendermint/tendermint/issues/3406
 		// cs.Logger.Error("Error with msg", "height", cs.Height, "round", cs.Round,
@@ -933,10 +924,8 @@ func (cs *ConsensusState) defaultDecideProposal(height int64, round int) {
 		}
 		cs.Logger.Info("Signed proposal", "height", height, "round", round, "proposal", proposal)
 		cs.Logger.Debug(fmt.Sprintf("Signed proposal block: %v", block))
-	} else {
-		if !cs.replayMode {
-			cs.Logger.Error("enterPropose: Error signing proposal", "height", height, "round", round, "err", err)
-		}
+	} else if !cs.replayMode {
+		cs.Logger.Error("enterPropose: Error signing proposal", "height", height, "round", round, "err", err)
 	}
 }
 
@@ -1047,7 +1036,7 @@ func (cs *ConsensusState) enterPrevoteWait(height int64, round int) {
 		return
 	}
 	if !cs.Votes.Prevotes(round).HasTwoThirdsAny() {
-		cmn.PanicSanity(fmt.Sprintf("enterPrevoteWait(%v/%v), but Prevotes does not have any +2/3 votes", height, round))
+		panic(fmt.Sprintf("enterPrevoteWait(%v/%v), but Prevotes does not have any +2/3 votes", height, round))
 	}
 	logger.Info(fmt.Sprintf("enterPrevoteWait(%v/%v). Current: %v/%v/%v", height, round, cs.Height, cs.Round, cs.Step))
 
@@ -1103,7 +1092,7 @@ func (cs *ConsensusState) enterPrecommit(height int64, round int) {
 	// the latest POLRound should be this round.
 	polRound, _ := cs.Votes.POLInfo()
 	if polRound < round {
-		cmn.PanicSanity(fmt.Sprintf("This POLRound should be %v but got %v", round, polRound))
+		panic(fmt.Sprintf("This POLRound should be %v but got %v", round, polRound))
 	}
 
 	// +2/3 prevoted nil. Unlock and precommit nil.
@@ -1137,7 +1126,7 @@ func (cs *ConsensusState) enterPrecommit(height int64, round int) {
 		logger.Info("enterPrecommit: +2/3 prevoted proposal block. Locking", "hash", blockID.Hash)
 		// Validate the block.
 		if err := cs.blockExec.ValidateBlock(cs.state, cs.ProposalBlock); err != nil {
-			cmn.PanicConsensus(fmt.Sprintf("enterPrecommit: +2/3 prevoted for an invalid block: %v", err))
+			panic(fmt.Sprintf("enterPrecommit: +2/3 prevoted for an invalid block: %v", err))
 		}
 		cs.LockedRound = round
 		cs.LockedBlock = cs.ProposalBlock
@@ -1175,7 +1164,7 @@ func (cs *ConsensusState) enterPrecommitWait(height int64, round int) {
 		return
 	}
 	if !cs.Votes.Precommits(round).HasTwoThirdsAny() {
-		cmn.PanicSanity(fmt.Sprintf("enterPrecommitWait(%v/%v), but Precommits does not have any +2/3 votes", height, round))
+		panic(fmt.Sprintf("enterPrecommitWait(%v/%v), but Precommits does not have any +2/3 votes", height, round))
 	}
 	logger.Info(fmt.Sprintf("enterPrecommitWait(%v/%v). Current: %v/%v/%v", height, round, cs.Height, cs.Round, cs.Step))
 
@@ -1214,7 +1203,7 @@ func (cs *ConsensusState) enterCommit(height int64, commitRound int) {
 
 	blockID, ok := cs.Votes.Precommits(commitRound).TwoThirdsMajority()
 	if !ok {
-		cmn.PanicSanity("RunActionCommit() expects +2/3 precommits")
+		panic("RunActionCommit() expects +2/3 precommits")
 	}
 
 	// The Locked* fields no longer matter.
@@ -1236,9 +1225,10 @@ func (cs *ConsensusState) enterCommit(height int64, commitRound int) {
 			cs.ProposalBlockParts = types.NewPartSetFromHeader(blockID.PartsHeader)
 			cs.eventBus.PublishEventValidBlock(cs.RoundStateEvent())
 			cs.evsw.FireEvent(types.EventValidBlock, &cs.RoundState)
-		} else {
-			// We just need to keep waiting.
 		}
+		// else {
+		// We just need to keep waiting.
+		// }
 	}
 }
 
@@ -1247,7 +1237,7 @@ func (cs *ConsensusState) tryFinalizeCommit(height int64) {
 	logger := cs.Logger.With("height", height)
 
 	if cs.Height != height {
-		cmn.PanicSanity(fmt.Sprintf("tryFinalizeCommit() cs.Height: %v vs height: %v", cs.Height, height))
+		panic(fmt.Sprintf("tryFinalizeCommit() cs.Height: %v vs height: %v", cs.Height, height))
 	}
 
 	blockID, ok := cs.Votes.Precommits(cs.CommitRound).TwoThirdsMajority()
@@ -1277,16 +1267,16 @@ func (cs *ConsensusState) finalizeCommit(height int64) {
 	block, blockParts := cs.ProposalBlock, cs.ProposalBlockParts
 
 	if !ok {
-		cmn.PanicSanity(fmt.Sprintf("Cannot finalizeCommit, commit does not have two thirds majority"))
+		panic(fmt.Sprintf("Cannot finalizeCommit, commit does not have two thirds majority"))
 	}
 	if !blockParts.HasHeader(blockID.PartsHeader) {
-		cmn.PanicSanity(fmt.Sprintf("Expected ProposalBlockParts header to be commit header"))
+		panic(fmt.Sprintf("Expected ProposalBlockParts header to be commit header"))
 	}
 	if !block.HashesTo(blockID.Hash) {
-		cmn.PanicSanity(fmt.Sprintf("Cannot finalizeCommit, ProposalBlock does not hash to commit hash"))
+		panic(fmt.Sprintf("Cannot finalizeCommit, ProposalBlock does not hash to commit hash"))
 	}
 	if err := cs.blockExec.ValidateBlock(cs.state, block); err != nil {
-		cmn.PanicConsensus(fmt.Sprintf("+2/3 committed an invalid block: %v", err))
+		panic(fmt.Sprintf("+2/3 committed an invalid block: %v", err))
 	}
 
 	cs.Logger.Info(fmt.Sprintf("Finalizing commit of block with %d txs", block.NumTxs),
