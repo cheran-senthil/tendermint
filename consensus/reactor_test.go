@@ -17,28 +17,29 @@ import (
 	abcicli "github.com/tendermint/tendermint/abci/client"
 	"github.com/tendermint/tendermint/abci/example/kvstore"
 	abci "github.com/tendermint/tendermint/abci/types"
-	bc "github.com/tendermint/tendermint/blockchain"
 	cfg "github.com/tendermint/tendermint/config"
-	dbm "github.com/tendermint/tendermint/libs/db"
 	"github.com/tendermint/tendermint/libs/log"
 	mempl "github.com/tendermint/tendermint/mempool"
 	"github.com/tendermint/tendermint/p2p"
+	"github.com/tendermint/tendermint/p2p/mock"
 	sm "github.com/tendermint/tendermint/state"
+	"github.com/tendermint/tendermint/store"
 	"github.com/tendermint/tendermint/types"
+	dbm "github.com/tendermint/tm-db"
 )
 
 //----------------------------------------------
 // in-process testnets
 
-func startConsensusNet(t *testing.T, css []*ConsensusState, N int) (
+func startConsensusNet(t *testing.T, css []*ConsensusState, n int) (
 	[]*ConsensusReactor,
 	[]types.Subscription,
 	[]*types.EventBus,
 ) {
-	reactors := make([]*ConsensusReactor, N)
+	reactors := make([]*ConsensusReactor, n)
 	blocksSubs := make([]types.Subscription, 0)
-	eventBuses := make([]*types.EventBus, N)
-	for i := 0; i < N; i++ {
+	eventBuses := make([]*types.EventBus, n)
+	for i := 0; i < n; i++ {
 		/*logger, err := tmflags.ParseLogLevel("consensus:info,*:error", logger, "info")
 		if err != nil {	t.Fatal(err)}*/
 		reactors[i] = NewConsensusReactor(css[i], true) // so we dont start the consensus states
@@ -51,9 +52,13 @@ func startConsensusNet(t *testing.T, css []*ConsensusState, N int) (
 		blocksSub, err := eventBuses[i].Subscribe(context.Background(), testSubscriber, types.EventQueryNewBlock)
 		require.NoError(t, err)
 		blocksSubs = append(blocksSubs, blocksSub)
+
+		if css[i].state.LastBlockHeight == 0 { //simulate handle initChain in handshake
+			sm.SaveState(css[i].blockExec.DB(), css[i].state)
+		}
 	}
 	// make connected switches and start all reactors
-	p2p.MakeConnectedSwitches(config.P2P, N, func(i int, s *p2p.Switch) *p2p.Switch {
+	p2p.MakeConnectedSwitches(config.P2P, n, func(i int, s *p2p.Switch) *p2p.Switch {
 		s.AddReactor("CONSENSUS", reactors[i])
 		s.SetLogger(reactors[i].conS.Logger.With("module", "p2p"))
 		return s
@@ -63,7 +68,7 @@ func startConsensusNet(t *testing.T, css []*ConsensusState, N int) (
 	// If we started the state machines before everyone was connected,
 	// we'd block when the cs fires NewBlockEvent and the peers are trying to start their reactors
 	// TODO: is this still true with new pubsub?
-	for i := 0; i < N; i++ {
+	for i := 0; i < n; i++ {
 		s := reactors[i].conS.GetState()
 		reactors[i].SwitchToConsensus(s, 0)
 	}
@@ -128,7 +133,7 @@ func TestReactorWithEvidence(t *testing.T) {
 		// css[i] = newConsensusStateWithConfig(thisConfig, state, privVals[i], app)
 
 		blockDB := dbm.NewMemDB()
-		blockStore := bc.NewBlockStore(blockDB)
+		blockStore := store.NewBlockStore(blockDB)
 
 		// one for mempool, one for consensus
 		mtx := new(sync.Mutex)
@@ -136,7 +141,7 @@ func TestReactorWithEvidence(t *testing.T) {
 		proxyAppConnCon := abcicli.NewLocalClient(mtx, app)
 
 		// Make Mempool
-		mempool := mempl.NewMempool(thisConfig.Mempool, proxyAppConnMem, 0)
+		mempool := mempl.NewCListMempool(thisConfig.Mempool, proxyAppConnMem, 0)
 		mempool.SetLogger(log.TestingLogger().With("module", "mempool"))
 		if thisConfig.Consensus.WaitForTxs() {
 			mempool.EnableTxsAvailable()
@@ -230,13 +235,56 @@ func TestReactorCreatesBlockWhenEmptyBlocksFalse(t *testing.T) {
 
 	// send a tx
 	if err := assertMempool(css[3].txNotifier).CheckTx([]byte{1, 2, 3}, nil); err != nil {
-		//t.Fatal(err)
+		t.Error(err)
 	}
 
 	// wait till everyone makes the first new block
 	timeoutWaitGroup(t, N, func(j int) {
 		<-blocksSubs[j].Out()
 	}, css)
+}
+
+func TestReactorReceiveDoesNotPanicIfAddPeerHasntBeenCalledYet(t *testing.T) {
+	N := 1
+	css, cleanup := randConsensusNet(N, "consensus_reactor_test", newMockTickerFunc(true), newCounter)
+	defer cleanup()
+	reactors, _, eventBuses := startConsensusNet(t, css, N)
+	defer stopConsensusNet(log.TestingLogger(), reactors, eventBuses)
+
+	var (
+		reactor = reactors[0]
+		peer    = mock.NewPeer(nil)
+		msg     = cdc.MustMarshalBinaryBare(&HasVoteMessage{Height: 1, Round: 1, Index: 1, Type: types.PrevoteType})
+	)
+
+	reactor.InitPeer(peer)
+
+	// simulate switch calling Receive before AddPeer
+	assert.NotPanics(t, func() {
+		reactor.Receive(StateChannel, peer, msg)
+		reactor.AddPeer(peer)
+	})
+}
+
+func TestReactorReceivePanicsIfInitPeerHasntBeenCalledYet(t *testing.T) {
+	N := 1
+	css, cleanup := randConsensusNet(N, "consensus_reactor_test", newMockTickerFunc(true), newCounter)
+	defer cleanup()
+	reactors, _, eventBuses := startConsensusNet(t, css, N)
+	defer stopConsensusNet(log.TestingLogger(), reactors, eventBuses)
+
+	var (
+		reactor = reactors[0]
+		peer    = mock.NewPeer(nil)
+		msg     = cdc.MustMarshalBinaryBare(&HasVoteMessage{Height: 1, Round: 1, Index: 1, Type: types.PrevoteType})
+	)
+
+	// we should call InitPeer here
+
+	// simulate switch calling Receive before AddPeer
+	assert.Panics(t, func() {
+		reactor.Receive(StateChannel, peer, msg)
+	})
 }
 
 // Test we record stats about votes and block parts from other peers.
@@ -329,7 +377,8 @@ func TestReactorVotingPowerChange(t *testing.T) {
 func TestReactorValidatorSetChanges(t *testing.T) {
 	nPeers := 7
 	nVals := 4
-	css, cleanup := randConsensusNetWithPeers(nVals, nPeers, "consensus_val_set_changes_test", newMockTickerFunc(true), newPersistentKVStore)
+	css, _, _, cleanup := randConsensusNetWithPeers(nVals, nPeers, "consensus_val_set_changes_test", newMockTickerFunc(true), newPersistentKVStoreWithPath)
+
 	defer cleanup()
 	logger := log.TestingLogger()
 
