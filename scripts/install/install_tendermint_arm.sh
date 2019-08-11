@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-REPO=github.com/tendermint/tendermint
+REPO=github.com/torusresearch/tendermint
 
 # change this to a specific release or branch
 BRANCH=master

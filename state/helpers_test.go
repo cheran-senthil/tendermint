@@ -4,14 +4,14 @@ import (
 	"bytes"
 	"fmt"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/proxy"
-	sm "github.com/tendermint/tendermint/state"
-	"github.com/tendermint/tendermint/types"
-	tmtime "github.com/tendermint/tendermint/types/time"
-	dbm "github.com/tendermint/tm-db"
+	abci "github.com/torusresearch/tendermint/abci/types"
+	"github.com/torusresearch/tendermint/crypto"
+	"github.com/torusresearch/tendermint/crypto/ed25519"
+	"github.com/torusresearch/tendermint/proxy"
+	sm "github.com/torusresearch/tendermint/state"
+	"github.com/torusresearch/tendermint/types"
+	tmtime "github.com/torusresearch/tendermint/types/time"
+	dbm "github.com/torusresearch/tm-db"
 )
 
 type paramsChangeTestCase struct {

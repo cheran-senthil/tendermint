@@ -7,13 +7,13 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/libs/events"
-	"github.com/tendermint/tendermint/libs/log"
-	ctypes "github.com/tendermint/tendermint/rpc/core/types"
-	rpc_client "github.com/tendermint/tendermint/rpc/lib/client"
-	em "github.com/tendermint/tendermint/tools/tm-monitor/eventmeter"
-	tmtypes "github.com/tendermint/tendermint/types"
+	"github.com/torusresearch/tendermint/crypto"
+	"github.com/torusresearch/tendermint/libs/events"
+	"github.com/torusresearch/tendermint/libs/log"
+	ctypes "github.com/torusresearch/tendermint/rpc/core/types"
+	rpc_client "github.com/torusresearch/tendermint/rpc/lib/client"
+	em "github.com/torusresearch/tendermint/tools/tm-monitor/eventmeter"
+	tmtypes "github.com/torusresearch/tendermint/types"
 )
 
 const maxRestarts = 25

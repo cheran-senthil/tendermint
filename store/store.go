@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"sync"
 
-	cmn "github.com/tendermint/tendermint/libs/common"
-	dbm "github.com/tendermint/tm-db"
+	cmn "github.com/torusresearch/tendermint/libs/common"
+	dbm "github.com/torusresearch/tm-db"
 
-	"github.com/tendermint/tendermint/types"
+	"github.com/torusresearch/tendermint/types"
 )
 
 /*

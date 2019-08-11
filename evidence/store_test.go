@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tendermint/tendermint/types"
-	dbm "github.com/tendermint/tm-db"
+	"github.com/torusresearch/tendermint/types"
+	dbm "github.com/torusresearch/tm-db"
 )
 
 //-------------------------------------------

@@ -6,21 +6,21 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tendermint/tendermint/store"
+	"github.com/torusresearch/tendermint/store"
 
 	"github.com/stretchr/testify/assert"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	cfg "github.com/tendermint/tendermint/config"
-	cmn "github.com/tendermint/tendermint/libs/common"
-	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/mock"
-	"github.com/tendermint/tendermint/p2p"
-	"github.com/tendermint/tendermint/proxy"
-	sm "github.com/tendermint/tendermint/state"
-	"github.com/tendermint/tendermint/types"
-	tmtime "github.com/tendermint/tendermint/types/time"
-	dbm "github.com/tendermint/tm-db"
+	abci "github.com/torusresearch/tendermint/abci/types"
+	cfg "github.com/torusresearch/tendermint/config"
+	cmn "github.com/torusresearch/tendermint/libs/common"
+	"github.com/torusresearch/tendermint/libs/log"
+	"github.com/torusresearch/tendermint/mock"
+	"github.com/torusresearch/tendermint/p2p"
+	"github.com/torusresearch/tendermint/proxy"
+	sm "github.com/torusresearch/tendermint/state"
+	"github.com/torusresearch/tendermint/types"
+	tmtime "github.com/torusresearch/tendermint/types/time"
+	dbm "github.com/torusresearch/tm-db"
 )
 
 var config *cfg.Config

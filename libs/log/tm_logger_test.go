@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/go-logfmt/logfmt"
-	"github.com/tendermint/tendermint/libs/log"
+	"github.com/torusresearch/tendermint/libs/log"
 )
 
 func TestLoggerLogsItsErrors(t *testing.T) {

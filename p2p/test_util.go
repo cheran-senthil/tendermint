@@ -5,13 +5,13 @@ import (
 	"net"
 	"time"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	cmn "github.com/tendermint/tendermint/libs/common"
-	"github.com/tendermint/tendermint/libs/log"
+	"github.com/torusresearch/tendermint/crypto"
+	"github.com/torusresearch/tendermint/crypto/ed25519"
+	cmn "github.com/torusresearch/tendermint/libs/common"
+	"github.com/torusresearch/tendermint/libs/log"
 
-	"github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/p2p/conn"
+	"github.com/torusresearch/tendermint/config"
+	"github.com/torusresearch/tendermint/p2p/conn"
 )
 
 const testCh = 0x01

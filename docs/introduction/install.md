@@ -1,27 +1,27 @@
 # Install Tendermint
 
 The fastest and easiest way to install the `tendermint` binary
-is to run [this script](https://github.com/tendermint/tendermint/blob/master/scripts/install/install_tendermint_ubuntu.sh) on
+is to run [this script](https://github.com/torusresearch/tendermint/blob/master/scripts/install/install_tendermint_ubuntu.sh) on
 a fresh Ubuntu instance,
-or [this script](https://github.com/tendermint/tendermint/blob/master/scripts/install/install_tendermint_bsd.sh)
+or [this script](https://github.com/torusresearch/tendermint/blob/master/scripts/install/install_tendermint_bsd.sh)
 on a fresh FreeBSD instance. Read the comments / instructions carefully (i.e., reset your terminal after running the script,
 make sure you are okay with the network connections being made).
 
 ## From Binary
 
-To download pre-built binaries, see the [releases page](https://github.com/tendermint/tendermint/releases).
+To download pre-built binaries, see the [releases page](https://github.com/torusresearch/tendermint/releases).
 
 ## From Source
 
 You'll need `go` [installed](https://golang.org/doc/install) and the required
-[environment variables set](https://github.com/tendermint/tendermint/wiki/Setting-GOPATH)
+[environment variables set](https://github.com/torusresearch/tendermint/wiki/Setting-GOPATH)
 
 ### Get Source Code
 
 ```
 mkdir -p $GOPATH/src/github.com/tendermint
 cd $GOPATH/src/github.com/tendermint
-git clone https://github.com/tendermint/tendermint.git
+git clone https://github.com/torusresearch/tendermint.git
 cd tendermint
 ```
 
@@ -63,14 +63,14 @@ tendermint node --proxy_app=kvstore
 If you already have Tendermint installed, and you make updates, simply
 
 ```
-cd $GOPATH/src/github.com/tendermint/tendermint
+cd $GOPATH/src/github.com/torusresearch/tendermint
 make install
 ```
 
 To upgrade, run
 
 ```
-cd $GOPATH/src/github.com/tendermint/tendermint
+cd $GOPATH/src/github.com/torusresearch/tendermint
 git pull origin master
 make install
 ```

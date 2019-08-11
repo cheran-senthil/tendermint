@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	cmn "github.com/tendermint/tendermint/libs/common"
-	rpcclient "github.com/tendermint/tendermint/rpc/lib/client"
+	cmn "github.com/torusresearch/tendermint/libs/common"
+	rpcclient "github.com/torusresearch/tendermint/rpc/lib/client"
 )
 
 func main() {

@@ -3,9 +3,9 @@ package lite
 import (
 	"bytes"
 
-	cmn "github.com/tendermint/tendermint/libs/common"
-	lerr "github.com/tendermint/tendermint/lite/errors"
-	"github.com/tendermint/tendermint/types"
+	cmn "github.com/torusresearch/tendermint/libs/common"
+	lerr "github.com/torusresearch/tendermint/lite/errors"
+	"github.com/torusresearch/tendermint/types"
 )
 
 var _ Verifier = (*BaseVerifier)(nil)

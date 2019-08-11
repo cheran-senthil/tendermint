@@ -130,7 +130,7 @@
   "abciServers": [
     {
       "name": "go-abci",
-      "url": "https://github.com/tendermint/tendermint/tree/master/abci",
+      "url": "https://github.com/torusresearch/tendermint/tree/master/abci",
       "language": "Go",
       "author": "Tendermint"
     },

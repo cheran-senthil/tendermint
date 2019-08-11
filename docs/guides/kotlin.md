@@ -108,7 +108,7 @@ Hello world.
 
 Tendermint Core communicates with the application through the Application
 BlockChain Interface (ABCI). All message types are defined in the [protobuf
-file](https://github.com/tendermint/tendermint/blob/develop/abci/types/types.proto).
+file](https://github.com/torusresearch/tendermint/blob/develop/abci/types/types.proto).
 This allows Tendermint Core to run applications written in any programming
 language.
 
@@ -158,17 +158,17 @@ Now your project is ready to compile `*.proto` files.
 Copy necessary .proto files to your project:
 ```sh
 mkdir -p \
-  $KVSTORE_HOME/src/main/proto/github.com/tendermint/tendermint/abci/types \
-  $KVSTORE_HOME/src/main/proto/github.com/tendermint/tendermint/crypto/merkle \
-  $KVSTORE_HOME/src/main/proto/github.com/tendermint/tendermint/libs/common \
+  $KVSTORE_HOME/src/main/proto/github.com/torusresearch/tendermint/abci/types \
+  $KVSTORE_HOME/src/main/proto/github.com/torusresearch/tendermint/crypto/merkle \
+  $KVSTORE_HOME/src/main/proto/github.com/torusresearch/tendermint/libs/common \
   $KVSTORE_HOME/src/main/proto/github.com/gogo/protobuf/gogoproto
 
-cp $GOPATH/src/github.com/tendermint/tendermint/abci/types/types.proto \
-   $KVSTORE_HOME/src/main/proto/github.com/tendermint/tendermint/abci/types/types.proto
-cp $GOPATH/src/github.com/tendermint/tendermint/crypto/merkle/merkle.proto \
-   $KVSTORE_HOME/src/main/proto/github.com/tendermint/tendermint/crypto/merkle/merkle.proto
-cp $GOPATH/src/github.com/tendermint/tendermint/libs/common/types.proto \
-   $KVSTORE_HOME/src/main/proto/github.com/tendermint/tendermint/libs/common/types.proto
+cp $GOPATH/src/github.com/torusresearch/tendermint/abci/types/types.proto \
+   $KVSTORE_HOME/src/main/proto/github.com/torusresearch/tendermint/abci/types/types.proto
+cp $GOPATH/src/github.com/torusresearch/tendermint/crypto/merkle/merkle.proto \
+   $KVSTORE_HOME/src/main/proto/github.com/torusresearch/tendermint/crypto/merkle/merkle.proto
+cp $GOPATH/src/github.com/torusresearch/tendermint/libs/common/types.proto \
+   $KVSTORE_HOME/src/main/proto/github.com/torusresearch/tendermint/libs/common/types.proto
 cp $GOPATH/src/github.com/gogo/protobuf/gogoproto/gogo.proto \
    $KVSTORE_HOME/src/main/proto/github.com/gogo/protobuf/gogoproto/gogo.proto
 ```
@@ -387,7 +387,7 @@ the application's `Query` method.
 
 Applications are free to provide their own APIs. But by using Tendermint Core
 as a proxy, clients (including [light client
-package](https://godoc.org/github.com/tendermint/tendermint/lite)) can leverage
+package](https://godoc.org/github.com/torusresearch/tendermint/lite)) can leverage
 the unified API across different applications. Plus they won't have to call the
 otherwise separate Tendermint Core API for additional proofs.
 
@@ -493,7 +493,7 @@ Tendermint Core.
 
 ```sh
 $ rm -rf /tmp/example
-$ cd $GOPATH/src/github.com/tendermint/tendermint
+$ cd $GOPATH/src/github.com/torusresearch/tendermint
 $ make install
 $ TMHOME="/tmp/example" tendermint init
 
@@ -569,7 +569,7 @@ $ curl -s 'localhost:26657/abci_query?data="tendermint"'
 
 I hope everything went smoothly and your first, but hopefully not the last,
 Tendermint Core application is up and running. If not, please [open an issue on
-Github](https://github.com/tendermint/tendermint/issues/new/choose). To dig
+Github](https://github.com/torusresearch/tendermint/issues/new/choose). To dig
 deeper, read [the docs](https://tendermint.com/docs/).
 
 The full source code of this example project can be found [here](https://github.com/climber73/tendermint-abci-grpc-kotlin).

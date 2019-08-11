@@ -2,9 +2,6 @@ module github.com/torusresearch/tendermint
 
 go 1.12
 
-replace github.com/tendermint/tendermint => github.com/torusresearch/torusresearch v4.0.0
-replace github.com/tendermint/tm-db => github.com/torusresearch/tm-db v2.0.0
-
 require (
 	github.com/VividCortex/gohistogram v1.0.0 // indirect
 	github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973 // indirect
@@ -41,6 +38,8 @@ require (
 	github.com/spf13/viper v1.0.0
 	github.com/stretchr/testify v1.3.0
 	github.com/tendermint/go-amino v0.14.1
+	github.com/tendermint/tm-db v0.1.1 // indirect
+	github.com/torusresearch/tm-db v0.0.0-00010101000000-000000000000
 	golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2
 	golang.org/x/net v0.0.0-20190724013045-ca1201d0de80
 	google.golang.org/grpc v1.22.1
