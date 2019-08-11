@@ -1,8 +1,8 @@
-module github.com/tendermint/tendermint
+module github.com/torusresearch/tendermint
 
 go 1.12
 
-replace github.com/tendermint/tm-db => github.com/torusresearch/tm-db v0.1.2+incompatible
+replace github.com/tendermint/tm-db => github.com/torusresearch/tm-db v2.0.0
 
 require (
 	github.com/VividCortex/gohistogram v1.0.0 // indirect
