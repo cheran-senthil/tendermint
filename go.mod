@@ -2,6 +2,7 @@ module github.com/torusresearch/tendermint
 
 go 1.12
 
+replace github.com/tendermint/tendermint => github.com/torusresearch/torusresearch v4.0.0
 replace github.com/tendermint/tm-db => github.com/torusresearch/tm-db v2.0.0
 
 require (
