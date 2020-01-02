@@ -2,11 +2,12 @@ package store
 
 import (
 	amino "github.com/tendermint/go-amino"
-	cryptoAmino "github.com/torusresearch/tendermint/crypto/encoding/amino"
+
+	"github.com/torusresearch/tendermint/types"
 )
 
 var cdc = amino.NewCodec()
 
 func init() {
-	cryptoAmino.RegisterAmino(cdc)
+	types.RegisterBlockAmino(cdc)
 }

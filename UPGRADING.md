@@ -110,7 +110,6 @@ The ABCI Application interface changed slightly so the CheckTx and DeliverTx
 methods now take Request structs. The contents of these structs are just the raw
 tx bytes, which were previously passed in as the argument.
 
-
 ## v0.31.6
 
 There are no breaking changes in this release except Go API of p2p and
@@ -193,6 +192,7 @@ due to changes in how various data structures are hashed.
 
 Any implementations of Tendermint blockchain verification, including lite clients,
 will need to be updated. For specific details:
+
 - [Merkle tree](./docs/spec/blockchain/encoding.md#merkle-trees)
 - [ConsensusParams](./docs/spec/blockchain/state.md#consensusparams)
 
@@ -437,7 +437,6 @@ app in the `RequestBeginBlock.LastCommitInfo` at block `H+3`. Apps were already
 required to maintain a map from validator addresses to pubkeys since v0.23 (when
 pubkeys were removed from RequestBeginBlock), but now they may need to track
 multiple validator sets at once to accomodate this delay.
-
 
 ### Block Size
 

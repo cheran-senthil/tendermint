@@ -5,7 +5,8 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/torusresearch/tendermint/crypto/ed25519"
+
+	"github.com/torusresearch/tendermint/crypto"
 	cmn "github.com/torusresearch/tendermint/libs/common"
 	p2pconn "github.com/torusresearch/tendermint/p2p/conn"
 )
@@ -20,7 +21,7 @@ type SocketDialer func() (net.Conn, error)
 
 // DialTCPFn dials the given tcp addr, using the given timeoutReadWrite and
 // privKey for the authenticated encryption handshake.
-func DialTCPFn(addr string, timeoutReadWrite time.Duration, privKey ed25519.PrivKeyEd25519) SocketDialer {
+func DialTCPFn(addr string, timeoutReadWrite time.Duration, privKey crypto.PrivKey) SocketDialer {
 	return func() (net.Conn, error) {
 		conn, err := cmn.Connect(addr)
 		if err == nil {
