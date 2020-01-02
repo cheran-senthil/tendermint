@@ -939,7 +939,7 @@ type InstrumentationConfig struct {
 // reporting.
 func DefaultInstrumentationConfig() *InstrumentationConfig {
 	return &InstrumentationConfig{
-		Prometheus:           true,
+		Prometheus:           false,
 		PrometheusListenAddr: ":26660",
 		MaxOpenConnections:   3,
 		Namespace:            "tendermint",
