@@ -1,7 +1,6 @@
 package privval
 
 import (
-
 	"fmt"
 	"net"
 

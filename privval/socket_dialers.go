@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-
 	"github.com/torusresearch/tendermint/crypto"
 	cmn "github.com/torusresearch/tendermint/libs/common"
 	p2pconn "github.com/torusresearch/tendermint/p2p/conn"
