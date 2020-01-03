@@ -9,9 +9,9 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/tendermint/tendermint/crypto"
-	cmn "github.com/tendermint/tendermint/libs/common"
-	tmtime "github.com/tendermint/tendermint/types/time"
+	"github.com/torusresearch/tendermint/crypto"
+	cmn "github.com/torusresearch/tendermint/libs/common"
+	tmtime "github.com/torusresearch/tendermint/types/time"
 )
 
 const (

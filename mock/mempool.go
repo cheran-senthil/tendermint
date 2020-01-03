@@ -1,10 +1,10 @@
 package mock
 
 import (
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/libs/clist"
-	mempl "github.com/tendermint/tendermint/mempool"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/torusresearch/tendermint/abci/types"
+	"github.com/torusresearch/tendermint/libs/clist"
+	mempl "github.com/torusresearch/tendermint/mempool"
+	"github.com/torusresearch/tendermint/types"
 )
 
 // Mempool is an empty implementation of a Mempool, useful for testing.

@@ -3,9 +3,9 @@ package null
 import (
 	"errors"
 
-	"github.com/tendermint/tendermint/libs/pubsub/query"
-	"github.com/tendermint/tendermint/state/txindex"
-	"github.com/tendermint/tendermint/types"
+	"github.com/torusresearch/tendermint/libs/pubsub/query"
+	"github.com/torusresearch/tendermint/state/txindex"
+	"github.com/torusresearch/tendermint/types"
 )
 
 var _ txindex.TxIndexer = (*TxIndex)(nil)

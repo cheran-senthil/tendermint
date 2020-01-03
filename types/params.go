@@ -3,9 +3,9 @@ package types
 import (
 	"github.com/pkg/errors"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	cmn "github.com/tendermint/tendermint/libs/common"
+	abci "github.com/torusresearch/tendermint/abci/types"
+	"github.com/torusresearch/tendermint/crypto/tmhash"
+	cmn "github.com/torusresearch/tendermint/libs/common"
 )
 
 const (

@@ -3,7 +3,7 @@ package evidence
 import (
 	"fmt"
 
-	"github.com/tendermint/tendermint/types"
+	"github.com/torusresearch/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
 )
 

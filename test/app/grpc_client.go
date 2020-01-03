@@ -8,7 +8,7 @@ import (
 	"context"
 
 	amino "github.com/tendermint/go-amino"
-	core_grpc "github.com/tendermint/tendermint/rpc/grpc"
+	core_grpc "github.com/torusresearch/tendermint/rpc/grpc"
 )
 
 var grpcAddr = "tcp://localhost:36656"

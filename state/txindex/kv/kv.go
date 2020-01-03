@@ -13,10 +13,10 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	cmn "github.com/tendermint/tendermint/libs/common"
-	"github.com/tendermint/tendermint/libs/pubsub/query"
-	"github.com/tendermint/tendermint/state/txindex"
-	"github.com/tendermint/tendermint/types"
+	cmn "github.com/torusresearch/tendermint/libs/common"
+	"github.com/torusresearch/tendermint/libs/pubsub/query"
+	"github.com/torusresearch/tendermint/state/txindex"
+	"github.com/torusresearch/tendermint/types"
 )
 
 const (

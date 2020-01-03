@@ -5,12 +5,12 @@ import (
 	"strings"
 	"testing"
 
-	abcicli "github.com/tendermint/tendermint/abci/client"
-	"github.com/tendermint/tendermint/abci/example/kvstore"
-	"github.com/tendermint/tendermint/abci/server"
-	"github.com/tendermint/tendermint/abci/types"
-	cmn "github.com/tendermint/tendermint/libs/common"
-	"github.com/tendermint/tendermint/libs/log"
+	abcicli "github.com/torusresearch/tendermint/abci/client"
+	"github.com/torusresearch/tendermint/abci/example/kvstore"
+	"github.com/torusresearch/tendermint/abci/server"
+	"github.com/torusresearch/tendermint/abci/types"
+	cmn "github.com/torusresearch/tendermint/libs/common"
+	"github.com/torusresearch/tendermint/libs/log"
 )
 
 //----------------------------------------

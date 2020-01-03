@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tendermint/tendermint/p2p"
+	"github.com/torusresearch/tendermint/p2p"
 )
 
 func TestScheduleInit(t *testing.T) {

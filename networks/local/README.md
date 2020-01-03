@@ -18,7 +18,7 @@ Note the binary will be mounted into the container so it can be updated without
 rebuilding the image.
 
 ```
-cd $GOPATH/src/github.com/tendermint/tendermint
+cd $GOPATH/src/github.com/torusresearch/tendermint
 
 # Build the linux binary in ./build
 make build-linux
@@ -57,7 +57,7 @@ The `./build` directory is mounted to the `/tendermint` mount point to attach th
 For instance, to create a single node testnet:
 
 ```
-cd $GOPATH/src/github.com/tendermint/tendermint
+cd $GOPATH/src/github.com/torusresearch/tendermint
 
 # Clear the build folder
 rm -rf ./build

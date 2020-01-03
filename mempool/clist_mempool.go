@@ -11,15 +11,15 @@ import (
 
 	"github.com/pkg/errors"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	cfg "github.com/tendermint/tendermint/config"
-	auto "github.com/tendermint/tendermint/libs/autofile"
-	"github.com/tendermint/tendermint/libs/clist"
-	cmn "github.com/tendermint/tendermint/libs/common"
-	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/p2p"
-	"github.com/tendermint/tendermint/proxy"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/torusresearch/tendermint/abci/types"
+	cfg "github.com/torusresearch/tendermint/config"
+	auto "github.com/torusresearch/tendermint/libs/autofile"
+	"github.com/torusresearch/tendermint/libs/clist"
+	cmn "github.com/torusresearch/tendermint/libs/common"
+	"github.com/torusresearch/tendermint/libs/log"
+	"github.com/torusresearch/tendermint/p2p"
+	"github.com/torusresearch/tendermint/proxy"
+	"github.com/torusresearch/tendermint/types"
 )
 
 //--------------------------------------------------------------------------------
@@ -561,7 +561,7 @@ func (mem *CListMempool) Update(
 		//   101 -> 102
 		// Mempool after:
 		//   100
-		// https://github.com/tendermint/tendermint/issues/3322.
+		// https://github.com/torusresearch/tendermint/issues/3322.
 		if e, ok := mem.txsMap.Load(txKey(tx)); ok {
 			mem.removeTx(tx, e.(*clist.CElement), false)
 		}

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tendermint/tendermint/libs/log"
+	"github.com/torusresearch/tendermint/libs/log"
 )
 
 type timeCheck struct {

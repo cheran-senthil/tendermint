@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/tendermint/tendermint/libs/log"
+	"github.com/torusresearch/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 )
 

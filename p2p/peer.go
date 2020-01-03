@@ -5,10 +5,10 @@ import (
 	"net"
 	"time"
 
-	cmn "github.com/tendermint/tendermint/libs/common"
-	"github.com/tendermint/tendermint/libs/log"
+	cmn "github.com/torusresearch/tendermint/libs/common"
+	"github.com/torusresearch/tendermint/libs/log"
 
-	tmconn "github.com/tendermint/tendermint/p2p/conn"
+	tmconn "github.com/torusresearch/tendermint/p2p/conn"
 )
 
 const metricsTickerDuration = 10 * time.Second

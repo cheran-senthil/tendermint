@@ -1,11 +1,11 @@
 package core
 
 import (
-	cm "github.com/tendermint/tendermint/consensus"
-	ctypes "github.com/tendermint/tendermint/rpc/core/types"
-	rpctypes "github.com/tendermint/tendermint/rpc/lib/types"
-	sm "github.com/tendermint/tendermint/state"
-	"github.com/tendermint/tendermint/types"
+	cm "github.com/torusresearch/tendermint/consensus"
+	ctypes "github.com/torusresearch/tendermint/rpc/core/types"
+	rpctypes "github.com/torusresearch/tendermint/rpc/lib/types"
+	sm "github.com/torusresearch/tendermint/state"
+	"github.com/torusresearch/tendermint/types"
 )
 
 // Validators gets the validator set at the given block height.
