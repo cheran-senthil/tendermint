@@ -164,6 +164,22 @@ func GenFilePV(keyFilePath, stateFilePath string) *FilePV {
 	}
 }
 
+//Generate pv file from crypto.PrivKey. Made to include filepath
+func GenFilePVFromPrivKey(privKey crypto.PrivKey, keyFilePath, stateFilePath string) *FilePV {
+	return &FilePV{
+		Key: FilePVKey{
+			Address:  privKey.PubKey().Address(),
+			PubKey:   privKey.PubKey(),
+			PrivKey:  privKey,
+			filePath: keyFilePath,
+		},
+		LastSignState: FilePVLastSignState{
+			Step:     stepNone,
+			filePath: stateFilePath,
+		},
+	}
+}
+
 // LoadFilePV loads a FilePV from the filePaths.  The FilePV handles double
 // signing prevention by persisting data to the stateFilePath.  If either file path
 // does not exist, the program will exit.
