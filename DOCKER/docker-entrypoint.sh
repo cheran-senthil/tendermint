@@ -20,4 +20,15 @@ if [ ! -d "$TMHOME/config" ]; then
 	mv "$TMHOME/config/genesis.json.new" "$TMHOME/config/genesis.json"
 fi
 
-exec tendermint "$@"
+config_path="/.torus/tendermint/config/config.toml"
+
+echo "Waiting for config file to be created!"
+
+# Wait until the config file is created
+while [ ! -f "$config_path" ]; do
+    sleep 5   # Wait for 5 second before checking again
+done
+
+# The file has been created, execute the next command
+echo "Config File created! Starting tendermint now."
+exec tendermint node --proxy_app "tcp://localhost:26655"

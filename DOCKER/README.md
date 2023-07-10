@@ -54,3 +54,15 @@ Note that this will build and use a different image than the ones provided here.
 ## Contributing
 
 Contributions are most welcome! See the [contributing file](https://github.com/tendermint/tendermint/blob/main/CONTRIBUTING.md) for more information.
+
+
+## Build docker image
+
+- make build-linux
+
+- docker buildx build --label=tendermint --tag="tendermint/tendermint" --platform=linux/amd64 DOCKER 
+
+## Push docker image to dev cluster 
+- docker tag tendermint/tendermint asia-southeast1-docker.pkg.dev/torus-infrastructure/tendermint/staging:v0.34.24
+
+- docker push asia-southeast1-docker.pkg.dev/torus-infrastructure/tendermint/staging:v0.34.24

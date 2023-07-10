@@ -1,6 +1,18 @@
+# stage 1 Generate Tendermint Binary
+FROM golang:1.18-alpine as builder
+RUN apk update && \
+    apk upgrade && \
+    apk --no-cache add make
+
+
+WORKDIR /go
+
+RUN make build-linux
+
+# stage 2
 FROM golang:1.18-alpine
 
-LABEL maintainer="himanshu@tor.us"
+LABEL maintainer="hello@tor.us"
 
 ENV TMHOME=/.torus/tendermint
 
@@ -11,7 +23,12 @@ ENV TMHOME=/.torus/tendermint
 # could execute bash commands.
 RUN apk update && \
     apk upgrade && \
-    apk --no-cache add curl jq bash
+    apk --no-cache add curl jq bash && \
+    addgroup tmuser && \
+    adduser -S -G tmuser tmuser -h "$TMHOME"
+
+# Run the container with tmuser by default. (UID=100, GID=1000)
+USER tmuser
 
 WORKDIR $TMHOME
 
@@ -20,7 +37,7 @@ EXPOSE 26656 26657 26660
 
 STOPSIGNAL SIGTERM
 
-COPY  ./tendermint /usr/bin/tendermint
+COPY --from=builder /tendermint/build/tendermint /usr/bin/tendermint
 
 
 ENV CHAIN_ID=main-chain-BLUBLU
@@ -28,4 +45,7 @@ ENV CHAIN_ID=main-chain-BLUBLU
 COPY ./docker-entrypoint.sh /usr/local/bin/
 
 ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD ["node" "--proxy-app=tcp://localhost:26655"]
+
 
